@@ -1,4 +1,6 @@
 class Node
+  attr_accessor :value, :left_node, :right_node
+
   private
 
   def initialize(value = nil, left_node = nil, right_node = nil)
@@ -6,8 +8,6 @@ class Node
     @left_node = left_node
     @right_node = right_node
   end
-
-  public
 end
 
 class Tree
@@ -16,10 +16,18 @@ class Tree
   private
 
   def build_tree(values)
-    values.sort!.uniq!
+    return Node.new if values.length == 0
+
+    middle = values.length / 2
+    middle_value = values[middle]
+    left = values.take(middle)
+    right = values.drop(middle + 1)
+
+    Node.new(middle_value, build_tree(left), build_tree(right))
   end
 
   def initialize(values)
+    values.sort!.uniq!
     @root = build_tree(values)
   end
 end
