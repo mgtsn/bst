@@ -1,7 +1,8 @@
 require "./bst"
 
 a = [1, 3, 5, 4, 3, 2, 7, 1, 6, 8]
+n = []
 
-t = Tree.new(a)
+tn = Tree.new(n)
 
-p t.root.left_node.value
+tn.insert(0)
