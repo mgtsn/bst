@@ -1,8 +1,10 @@
 require "./bst"
 
 a = [1, 3, 5, 4, 3, 2, 7, 1, 6, 8]
-n = []
+n = [1, 2, 3]
 
-tn = Tree.new(n)
+tn = Tree.new(a)
 
-tn.insert(0)
+# p tn
+
+p tn.find(7)

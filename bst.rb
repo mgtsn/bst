@@ -53,14 +53,27 @@ class Tree
     current_node
   end
 
+  def find_helper(current_node, key)
+    return nil if current_node.nil?
+    return current_node if current_node.value == key
+
+    if key < current_node.value
+      return find_helper(current_node.left_node, key)
+    else
+      return find_helper(current_node.right_node, key)
+    end
+  end
+
   public
 
+  #returns the node with the given key, or nil if it is not present
+  def find(key)
+    find_helper(@root, key)
+  end
+
+  #inserts given value as a leaf node
   def insert(key)
-    begin
-      @root = Node.new(key) if @root == nil
-    rescue
-      @root = insert_helper(@root, key)
-    end
+    @root = insert_helper(@root, key)
   end
 
   def delete(key)
