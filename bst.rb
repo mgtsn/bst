@@ -6,6 +6,10 @@ class Node
     self.value <=> other.value
   end
 
+  def is_leaf?
+    nil == self.left_node and nil == self.right_node
+  end
+
   private
 
   def initialize(value = nil, left_node = nil, right_node = nil)
@@ -21,6 +25,7 @@ class Tree
 
   private
 
+  #create tree from array of values
   def build_tree(values)
     return nil if values.length == 0
 
@@ -36,23 +41,23 @@ class Tree
     @root = build_tree(values.sort.uniq)
   end
 
+  #insert new node with given value
   def insert_helper(current_node, key)
-    begin
-      return Node.new(key) if current_node == nil
-    rescue
-      v = current_node.value
+    return Node.new(key) if nil == current_node
 
-      if v == key
-        return current_node
-      elsif v > key
-        current_node.left_node = insert_helper(current_node.left_node, key)
-      elsif v < key
-        current_node.right_node = insert_helper(current_node.right_node, key)
-      end
+    v = current_node.value
+
+    if v == key
+      return current_node
+    elsif v > key
+      current_node.left_node = insert_helper(current_node.left_node, key)
+    elsif v < key
+      current_node.right_node = insert_helper(current_node.right_node, key)
     end
     current_node
   end
 
+  #calls itself recursively on left or right subtree
   def find_helper(current_node, key)
     return nil if current_node.nil?
     return current_node if current_node.value == key
@@ -64,7 +69,37 @@ class Tree
     end
   end
 
+  def find_parent(current_node, key)
+    return nil if @root.value == key
+    # if current_node.left_node.value == key
+
+    if key < current_node.value
+      return find_helper(current_node.left_node, key)
+    else
+      return find_helper(current_node.right_node, key)
+    end
+  end
+
+  def find_successor(current_node, key)
+  end
+
   public
+
+  #return array of values from depth first traversal
+  def depth_first(current_node = @root)
+    if nil == current_node
+      return []
+    elsif current_node.is_leaf?
+      return [current_node.value]
+    else
+      l_node = current_node.left_node
+      r_node = current_node.right_node
+      return [current_node.value] + (depth_first(l_node) + depth_first(r_node))
+    end
+  end
+
+  def display
+  end
 
   #returns the node with the given key, or nil if it is not present
   def find(key)
@@ -77,5 +112,53 @@ class Tree
   end
 
   def delete(key)
+    target_node = find(key)
+
+    l = target_node.left_node
+    r = target_node.right_node
+
+    if l.nil? and r.nil?
+      puts "leaf"
+      # parent_node = find_parent(@head. key)
+      # parent_node.value = key
+      # if key == parent_node.left_node
+      #   parent_node.left_node = nil
+      # else
+      #   parent_node.right_node = nil
+      # end
+    elsif l.nil?
+      puts "right"
+    elsif r.nil?
+      target_node.value = l.value
+      target_node.left_node = nil
+    else
+      puts "both"
+      # successor = find_successor(@head, key)
+      # target_node.value = successor.value
+      # delete(successor)
+    end
+
+    # nil_nodes = 0
+    # nil_nodes += 1 if target_node.left_node.nil?
+    # nil_nodes += 1 if target_node.right_node.nil?
+
+    # case nil_nodes
+    # when 1
+    #   p "1"
+    # when 2
+    #   target_node = nil
+    # else
+    #   p "0"
+    # end
+  end
+
+  def height(target_node)
+    if nil == target_node
+      return -1
+    elsif target_node.is_leaf?
+      return 0
+    else
+      return [height(target_node.left_node) + 1, height(target_node.right_node) + 1].max
+    end
   end
 end

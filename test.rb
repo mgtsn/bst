@@ -7,4 +7,12 @@ tn = Tree.new(a)
 
 # p tn
 
-p tn.find(7)
+# p tn.find(2).right_node.value
+# tn.delete(2)
+# p tn.find(3)
+
+p tn.depth_first
+
+tn.insert(0)
+
+p tn.depth_first
