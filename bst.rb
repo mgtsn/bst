@@ -69,21 +69,32 @@ class Tree
     end
   end
 
+  public
+
   def find_parent(current_node, key)
     return nil if @root.value == key
     # if current_node.left_node.value == key
 
+    l = current_node.left_node
+    r = current_node.right_node
+
+    unless l.nil?
+      return current_node if l.value == key
+    end
+
+    unless r.nil?
+      return current_node if r.value == key
+    end
+
     if key < current_node.value
-      return find_helper(current_node.left_node, key)
+      return find_parent(l, key)
     else
-      return find_helper(current_node.right_node, key)
+      return find_parent(r, key)
     end
   end
 
   def find_successor(current_node, key)
   end
-
-  public
 
   #return array of values from depth first traversal
   def depth_first(current_node = @root)
@@ -100,6 +111,8 @@ class Tree
 
   def display
   end
+
+  #public
 
   #returns the node with the given key, or nil if it is not present
   def find(key)
@@ -118,38 +131,27 @@ class Tree
     r = target_node.right_node
 
     if l.nil? and r.nil?
-      puts "leaf"
-      # parent_node = find_parent(@head. key)
-      # parent_node.value = key
-      # if key == parent_node.left_node
-      #   parent_node.left_node = nil
-      # else
-      #   parent_node.right_node = nil
-      # end
+      parent_node = find_parent(@root, key)
+      parent_node.value = key
+      if key == parent_node.left_node.value
+        parent_node.left_node = nil
+      else
+        parent_node.right_node = nil
+      end
     elsif l.nil?
-      puts "right"
+      target_node.value = r.value
+      target_node.left_node = r.left_node
+      target_node.right_node = r.right_node
     elsif r.nil?
       target_node.value = l.value
-      target_node.left_node = nil
+      target_node.right_node = l.right_node
+      target_node.left_node = l.left_node
     else
       puts "both"
       # successor = find_successor(@head, key)
       # target_node.value = successor.value
       # delete(successor)
     end
-
-    # nil_nodes = 0
-    # nil_nodes += 1 if target_node.left_node.nil?
-    # nil_nodes += 1 if target_node.right_node.nil?
-
-    # case nil_nodes
-    # when 1
-    #   p "1"
-    # when 2
-    #   target_node = nil
-    # else
-    #   p "0"
-    # end
   end
 
   def height(target_node)
